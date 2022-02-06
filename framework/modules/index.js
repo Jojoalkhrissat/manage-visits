@@ -30,11 +30,14 @@ const Visits = mongoose.model('visits', new mongoose.Schema({
   Client.watch().on('change', () => {
     cache.del('visitDetails')
   });
-  Visits.watch().on('change', () => {
+  Visits.watch([
+    {$addFields:{weekDay:{$dayOfWeek:{$toDate:'$time'}}}},
+    {$match:{$and:[{time : { $gte :  cache.get('requestParams')?cache.get('requestParams').from:'318677501000', $lte : cache.get('requestParams')?cache.get('requestParams').to:'318677501000'}},
+    {weekDay:cache.get('requestParams')?getWeekdayNumber(cache.get('requestParams').day):1}]}}
+    ]).on('change', () => {
     cache.del('visitDetails')
   });
   User.watch().on('change', () => {
-    cache.del('visitDetails')
   });
 module.exports = {
     User,
