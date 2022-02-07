@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const {cache} = require('../config');
+const {getWeekdayNumber} = require('../../helper')
 
 const User = mongoose.model('user', new mongoose.Schema({
   name: {
